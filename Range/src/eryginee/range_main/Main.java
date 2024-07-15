@@ -1,6 +1,7 @@
 package eryginee.range_main;
 
 import java.util.Scanner;
+
 import eryginee.range.Range;
 
 public class Main {
@@ -30,6 +31,33 @@ public class Main {
             System.out.printf("Число %.2f входит в измененный диапазон%n", enteredNumber);
         } else {
             System.out.printf("Число %.2f не входит в измененный диапазон%n", enteredNumber);
+        }
+
+        // Создаем второй интервал
+        Range secondRange = new Range(39.00, 56.03);
+
+        // Проверяем метод getIntersection
+        Range intersectionResult = range.getIntersection(secondRange);
+        if (intersectionResult != null) {
+            System.out.println("\nПересечение интервалов:");
+            System.out.println(intersectionResult);
+        } else {
+            System.out.println("\nИнтервалы не пересекаются.");
+        }
+
+        // Проверяем метод getUnion
+        Range[] unionResult = range.getUnion(secondRange);
+        System.out.println();
+        System.out.println("Объединение интервалов:");
+        for (Range rangeResult : unionResult) {
+            System.out.println(rangeResult);
+        }
+
+        // Проверяем метод getDifference
+        Range[] differenceResult = range.getDifference(secondRange);
+        System.out.println("\nРазность интервалов:");
+        for (Range rangeResult : differenceResult) {
+            System.out.println(rangeResult);
         }
     }
 }
