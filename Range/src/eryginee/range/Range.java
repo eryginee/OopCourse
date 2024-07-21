@@ -29,67 +29,55 @@ public class Range {
         return to - from;
     }
 
-    public boolean isInside(double enteredNumber) {
-        return enteredNumber >= from && enteredNumber <= to;
+    public boolean isInside(double numberToCheck) {
+        return numberToCheck >= from && numberToCheck <= to;
     }
 
-    public Range getIntersection(Range secondRange) {
-        double newFrom = Math.max(this.from, secondRange.getFrom());
-        double newTo = Math.min(this.to, secondRange.getTo());
+    public Range getIntersection(Range range) {
+        double resultFrom = Math.max(from, range.from);
+        double resultTo = Math.min(to, range.to);
 
-        if (newFrom < newTo) { // Если новое начало диапазона меньше нового конца, значит пересечение существует
-            return new Range(newFrom, newTo);
-        } else {
-            return null;
+        if (resultFrom < resultTo) { // Если новое начало диапазона меньше нового конца, значит пересечение существует
+            return new Range(resultFrom, resultTo);
         }
+
+        return null;
     }
 
-    public Range[] getUnion(Range secondRange) {
-        double firstFrom = this.from;
-        double firstTo = this.to;
-        double secondFrom = secondRange.getFrom();
-        double secondTo = secondRange.getTo();
+    public Range[] getUnion(Range range) {
+        double resultFrom = range.from;
+        double resultTo = range.to;
 
-        Range[] result;
-        if (firstTo < secondFrom || secondTo < firstFrom) {
+        if (to < resultFrom || resultTo < from) {
             // Нет пересечения, добавляем оба интервала в результат
-            result = new Range[]{this, secondRange};
-        } else {
-            // Если есть пересечение, объединяем интервалы
-            double newFrom = Math.min(firstFrom, secondFrom);
-            double newTo = Math.max(firstTo, secondTo);
-
-            result = new Range[]{new Range(newFrom, newTo)};
+            return new Range[]{new Range(from, to), new Range(resultFrom, resultTo)};
         }
 
-        return result;
+        // Если есть пересечение, объединяем интервалы
+        double newFrom = Math.min(from, resultFrom);
+        double newTo = Math.max(to, resultTo);
+
+        return new Range[]{new Range(newFrom, newTo)};
     }
 
-    public Range[] getDifference(Range secondRange) {
-        double firstFrom = this.from;
-        double firstTo = this.to;
-        double secondFrom = secondRange.getFrom();
-        double secondTo = secondRange.getTo();
+    public Range[] getDifference(Range range) {
+        double resultFrom = range.from;
+        double resultTo = range.to;
 
-        Range[] result;
-
-        if (firstTo <= secondFrom || secondTo <= firstFrom) {
-            // Интервалы не пересекаются, возвращаем исходный интервал this
-            result = new Range[]{this};
-        } else if (firstFrom < secondFrom && firstTo > secondTo) {
-            // Второй интервал полностью внутри первого, разделяем исходный интервал на два
-            result = new Range[]{new Range(firstFrom, secondFrom), new Range(secondTo, firstTo)};
-        } else if (firstFrom < secondFrom) {
-            // Часть первого интервала слева от второго
-            result = new Range[]{new Range(firstFrom, secondFrom)};
-        } else {
-            // Часть первого интервала справа от второго
-            result = new Range[]{new Range(secondTo, firstTo)};
+        if (to <= resultFrom || resultTo <= from) {         // Интервалы не пересекаются, возвращаем исходный интервал
+            return new Range[]{new Range(from, to)};
+        } else if (from < resultFrom && to > resultTo) {           // Второй интервал строго внутри первого, разделяем исходный интервал на два
+            return new Range[]{new Range(from, resultFrom), new Range(resultTo, to)};
+        } else if (from < resultFrom && to <= resultTo) {            // Часть первого интервала слева от второго, конец второго интервала >= концу первого
+            return new Range[]{new Range(from, resultFrom)};
+        } else if (from >= resultFrom && to > resultTo) {            // Часть первого интервала справа от второго
+            return new Range[]{new Range(resultTo, to)};
         }
 
-        return result;
+        return null;            // В случае, если интервалы совпадают, либо первый интервал меньше второго и находится внутри него (одна из границ может совпадать)
     }
 
+    @Override
     public String toString() {
         return "[" + from + ", " + to + "]";
     }

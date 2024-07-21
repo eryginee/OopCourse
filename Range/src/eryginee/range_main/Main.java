@@ -1,18 +1,13 @@
 package eryginee.range_main;
 
-import java.util.Scanner;
-
 import eryginee.range.Range;
 
 public class Main {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        Range range = new Range(10.45, 27.68);
+        Range range = new Range(6, 11);
 
         System.out.println("Длина диапазона чисел равна: " + range.getLength());
-
-        System.out.println("Введите число для проверки:");
-        double enteredNumber = scanner.nextDouble();
+        double enteredNumber = 6;
 
         if (range.isInside(enteredNumber)) {
             System.out.printf("Число %.2f входит в установленный диапазон%n", enteredNumber);
@@ -22,8 +17,8 @@ public class Main {
 
         System.out.println();
 
-        range.setFrom(35.54);
-        range.setTo(57.93);
+        range.setFrom(2);
+        range.setTo(7);
 
         System.out.println("Длина измененного диапазона чисел равна: " + range.getLength());
 
@@ -34,30 +29,41 @@ public class Main {
         }
 
         // Создаем второй интервал
-        Range secondRange = new Range(39.00, 56.03);
+        Range secondRange = new Range(1, 6);
 
         // Проверяем метод getIntersection
-        Range intersectionResult = range.getIntersection(secondRange);
-        if (intersectionResult != null) {
-            System.out.println("\nПересечение интервалов:");
-            System.out.println(intersectionResult);
+        Range intersection = range.getIntersection(secondRange);
+
+        if (intersection != null) {
+            System.out.println();
+            System.out.println("Пересечение интервалов:");
+            System.out.println(intersection);
         } else {
-            System.out.println("\nИнтервалы не пересекаются.");
+            System.out.println();
+            System.out.println("Интервалы не пересекаются.");
         }
 
         // Проверяем метод getUnion
-        Range[] unionResult = range.getUnion(secondRange);
+        Range[] union = range.getUnion(secondRange);
         System.out.println();
         System.out.println("Объединение интервалов:");
-        for (Range rangeResult : unionResult) {
-            System.out.println(rangeResult);
+
+        for (Range unionRange : union) {
+            System.out.println(unionRange);
         }
 
         // Проверяем метод getDifference
-        Range[] differenceResult = range.getDifference(secondRange);
-        System.out.println("\nРазность интервалов:");
-        for (Range rangeResult : differenceResult) {
-            System.out.println(rangeResult);
+        Range[] difference = range.getDifference(secondRange);
+        System.out.println();
+
+        if (difference == null) {
+            System.out.println("Разность интервалов пуста");
+        } else {
+            System.out.println("Разность интервалов:");
+
+            for (Range differenceRange : difference) {
+                System.out.println(differenceRange);
+            }
         }
     }
 }
