@@ -45,36 +45,36 @@ public class Range {
     }
 
     public Range[] getUnion(Range range) {
-        double resultFrom = range.from;
-        double resultTo = range.to;
-
-        if (to < resultFrom || resultTo < from) {
+        if (to < range.from || range.to < from) {
             // Нет пересечения, добавляем оба интервала в результат
-            return new Range[]{new Range(from, to), new Range(resultFrom, resultTo)};
+            return new Range[]{new Range(from, to), new Range(range.from, range.to)};
         }
 
         // Если есть пересечение, объединяем интервалы
-        double newFrom = Math.min(from, resultFrom);
-        double newTo = Math.max(to, resultTo);
+        double newFrom = Math.min(from, range.from);
+        double newTo = Math.max(to, range.to);
 
         return new Range[]{new Range(newFrom, newTo)};
     }
 
     public Range[] getDifference(Range range) {
-        double resultFrom = range.from;
-        double resultTo = range.to;
-
-        if (to <= resultFrom || resultTo <= from) {         // Интервалы не пересекаются, возвращаем исходный интервал
+        if (to <= range.from || range.to <= from) {         // Интервалы не пересекаются, возвращаем исходный интервал
             return new Range[]{new Range(from, to)};
-        } else if (from < resultFrom && to > resultTo) {           // Второй интервал строго внутри первого, разделяем исходный интервал на два
-            return new Range[]{new Range(from, resultFrom), new Range(resultTo, to)};
-        } else if (from < resultFrom && to <= resultTo) {            // Часть первого интервала слева от второго, конец второго интервала >= концу первого
-            return new Range[]{new Range(from, resultFrom)};
-        } else if (from >= resultFrom && to > resultTo) {            // Часть первого интервала справа от второго
-            return new Range[]{new Range(resultTo, to)};
         }
 
-        return null;            // В случае, если интервалы совпадают, либо первый интервал меньше второго и находится внутри него (одна из границ может совпадать)
+        if (from < range.from && to > range.to) {           // Второй интервал строго внутри первого, разделяем исходный интервал на два
+            return new Range[]{new Range(from, range.from), new Range(range.to, to)};
+        }
+
+        if (from < range.from && to <= range.to) {            // Часть первого интервала слева от второго, конец второго интервала >= концу первого
+            return new Range[]{new Range(from, range.from)};
+        }
+
+        if (from >= range.from && to > range.to) {            // Часть первого интервала справа от второго
+            return new Range[]{new Range(range.to, to)};
+        }
+
+        return new Range[0];            // В случае, если интервалы совпадают, либо первый интервал меньше второго и находится внутри него (одна из границ может совпадать)
     }
 
     @Override
