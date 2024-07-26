@@ -51,10 +51,10 @@ public class Range {
         }
 
         // Если есть пересечение, объединяем интервалы
-        double newFrom = Math.min(from, range.from);
-        double newTo = Math.max(to, range.to);
+        double resultFrom = Math.min(from, range.from);
+        double resultTo = Math.max(to, range.to);
 
-        return new Range[]{new Range(newFrom, newTo)};
+        return new Range[]{new Range(resultFrom, resultTo)};
     }
 
     public Range[] getDifference(Range range) {
