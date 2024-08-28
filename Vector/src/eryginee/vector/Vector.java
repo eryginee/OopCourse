@@ -176,4 +176,3 @@ public class Vector {
         return sum;
     }
 }
-
