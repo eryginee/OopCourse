@@ -1,11 +1,17 @@
 package eryginee.shapes;
 
-import java.util.Objects;
-
 public class Circle implements Shape {
-    private final double radius;
+    private double radius;
 
     public Circle(double radius) {
+        this.radius = radius;
+    }
+
+    public double getRadius() {
+        return radius;
+    }
+
+    public void setRadius(double radius) {
         this.radius = radius;
     }
 
@@ -37,17 +43,27 @@ public class Circle implements Shape {
     @Override
     public boolean equals(Object obj) {
         // Проверяем равенство ссылок
-        if (this == obj) return true;
+        if (this == obj) {
+            return true;
+        }
 
-        // Проверка на тип, то есть является ли obj экземпляром класса Circle
-        if (!(obj instanceof Circle other)) return false;
+        // Проверка на null и сравненние классов
+        if (obj == null || !(obj.getClass() == this.getClass())) {
+            return false;
+        }
 
         // Сравнение параметров (радиусов окружностей)
-        return Double.compare(radius, other.radius) == 0;
+        Circle other = (Circle) obj;
+        return radius == other.radius;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(radius);
+        int result = 17;
+        long temp = Double.doubleToLongBits(radius); // Преобразуем radius в long
+
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+
+        return result;
     }
 }

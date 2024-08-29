@@ -1,13 +1,19 @@
 package eryginee.shapes;
 
-import java.util.Objects;
-
 public class Rectangle implements Shape {
-    private final double width;
-    private final double height;
+    private double width;
+    private double height;
 
     public Rectangle(double width, double height) {
         this.width = width;
+        this.height = height;
+    }
+
+    public void setWidth(double width) {
+        this.width = width;
+    }
+
+    public void setHeight(double height) {
         this.height = height;
     }
 
@@ -39,18 +45,29 @@ public class Rectangle implements Shape {
     @Override
     public boolean equals(Object obj) {
         // Проверяем равенство ссылок
-        if (this == obj) return true;
+        if (this == obj) {
+            return true;
+        }
 
-        // Проверка на тип, то есть является ли obj экземпляром класса Rectangle
-        if (!(obj instanceof Rectangle other)) return false;
+        // Проверка на null и сравненние классов
+        if (obj == null || !(obj.getClass() == this.getClass())) {
+            return false;
+        }
 
+        Rectangle other = (Rectangle) obj; // Приведение типа
         // Сравнение параметров (ширин и высот)
-        return Double.compare(width, other.width) == 0 &&
-                Double.compare(height, other.height) == 0;
+        return width == other.width && height == other.height;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(width, height);
+        int result = 17;
+        long tempWidth = Double.doubleToLongBits(width);
+        long tempHeight = Double.doubleToLongBits(height);
+
+        result = 31 * result + (int) (tempWidth ^ (tempWidth >>> 32)); // Хеширование width
+        result = 31 * result + (int) (tempHeight ^ (tempHeight >>> 32)); //Хеширование height
+
+        return result;
     }
 }

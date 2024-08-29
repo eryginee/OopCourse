@@ -1,13 +1,14 @@
 package eryginee.shapes_main;
 
 import eryginee.shapes.*;
+import eryginee.shapes.comparators.AreaComparator;
+import eryginee.shapes.comparators.PerimeterComparator;
 
 import java.util.Arrays;
-import java.util.Comparator;
 
 public class Main {
     public static void main(String[] args) {
-        Shape[] shapes = new Shape[]{
+        Shape[] shapes = {
                 new Triangle(0, 0, 3, 0, 0, 4),
                 new Square(6),
                 new Circle(5),
@@ -18,21 +19,18 @@ public class Main {
                 new Rectangle(4, 7)
         };
 
-        // Сортировка фигур по площади в порядке убывания
-        Arrays.sort(shapes, Comparator.comparingDouble(Shape::getArea).reversed());
-
+        // Сортируем по площади
+        Arrays.sort(shapes, new AreaComparator());
         Shape maxAreaShape = shapes[0];
 
         System.out.printf("Фигура с максимальной площадью: Тип: %s, Площадь: %.2f%n",
                 maxAreaShape.getClass().getSimpleName(), maxAreaShape.getArea());
 
-        // Сортировка фигур по периметру в порядке убывания
-        Arrays.sort(shapes, Comparator.comparingDouble(Shape::getPerimeter).reversed());
-
-        // Получаем фигуру со вторым по величине периметром
-        Shape secondLargerPerimeterShape = shapes[1];
+        // Сортируем по периметру
+        Arrays.sort(shapes, new PerimeterComparator());
+        Shape secondMaxPerimeterShape = shapes[1]; // Второй элемент после сортировки
 
         System.out.printf("Фигура со вторым по величине периметром: Тип: %s, Периметр: %.2f%n",
-                secondLargerPerimeterShape.getClass().getSimpleName(), secondLargerPerimeterShape.getPerimeter());
+                secondMaxPerimeterShape.getClass().getSimpleName(), secondMaxPerimeterShape.getPerimeter());
     }
 }

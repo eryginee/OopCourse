@@ -1,53 +1,69 @@
 package eryginee.shapes;
 
-import java.util.Objects;
-
 public class Square implements Shape {
-    private final double side;
+    private double sideLength;
 
-    public Square(double side) {
-        this.side = side;
+    public Square(double sideLength) {
+        this.sideLength = sideLength;
+    }
+
+    public double getSideLength() {
+        return sideLength;
+    }
+
+    public void setSideLength(double sideLength) {
+        this.sideLength = sideLength;
     }
 
     @Override
     public double getWidth() {
-        return side; // Ширина квадрата
+        return sideLength;
     }
 
     @Override
     public double getHeight() {
-        return side; // Высота квадрата
+        return sideLength;
     }
 
     @Override
     public double getArea() {
-        return side * side; // Площадь квадрата
+        return sideLength * sideLength;
     }
 
     @Override
     public double getPerimeter() {
-        return 4 * side; // Периметр квадрата
+        return 4 * sideLength;
     }
 
     @Override
     public String toString() {
-        return String.format("Square(side=%.2f)", side);
+        return String.format("Square(side=%.2f)", sideLength);
     }
 
     @Override
     public boolean equals(Object obj) {
         // Проверяем равенство ссылок
-        if (this == obj) return true;
+        if (this == obj) {
+            return true;
+        }
 
-        // Проверка на тип, то есть является ли obj экземпляром класса Square
-        if (!(obj instanceof Square other)) return false;
+        // Проверка на null и сравненние классов
+        if (obj == null || !(obj.getClass() == this.getClass())) {
+            return false;
+        }
 
-        // Сравнение параметров (ширин и высот)
-        return Double.compare(side, other.side) == 0;
+        // Сравнение параметров (сторон квадрата)
+        Square other = (Square) obj;
+        return sideLength == other.sideLength;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(side);
+        int result = 17;
+        long temp = Double.doubleToLongBits(sideLength);
+
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+
+        return result;
     }
 }
