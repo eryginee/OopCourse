@@ -13,14 +13,14 @@ public class Main {
         System.out.println("vector3: " + vector3);
         System.out.println();
 
-        Vector vector4 = Vector.addVectors(vector2, vector3); // Сложение векторов
-        System.out.println("vector2 + vector3 = " + vector4);
+        Vector vector4 = Vector.createSummingVector(vector2, vector3); // Сложение векторов
+        System.out.println("vector4 = vector2 + vector3 = " + vector4);
 
-        Vector vector5 = vector2.subtractVectors(vector3); // Вычитание векторов
-        System.out.println("vector2 - vector3 = " + vector5);
+        Vector vector5 = Vector.createSubtractingVector(vector1, vector3); // Вычитание векторов
+        System.out.println("vector5 = vector1 - vector3 = " + vector5);
         System.out.println();
 
-        double dotProduct = Vector.vectorsDotProduct(vector2, vector3);
-        System.out.println("Скалярное произведение vector2 и vector3 равно: " + dotProduct);
+        double dotProduct = Vector.getDotProduct(vector4, vector5);
+        System.out.println("Скалярное произведение vector4 и vector5 равно: " + dotProduct);
     }
 }
