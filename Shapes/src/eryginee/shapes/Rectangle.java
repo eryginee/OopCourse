@@ -9,22 +9,22 @@ public class Rectangle implements Shape {
         this.height = height;
     }
 
-    public void setWidth(double width) {
-        this.width = width;
-    }
-
-    public void setHeight(double height) {
-        this.height = height;
-    }
-
     @Override
     public double getWidth() {
         return width;
     }
 
+    public void setWidth(double width) {
+        this.width = width;
+    }
+
     @Override
     public double getHeight() {
         return height;
+    }
+
+    public void setHeight(double height) {
+        this.height = height;
     }
 
     @Override
@@ -49,25 +49,24 @@ public class Rectangle implements Shape {
             return true;
         }
 
-        // Проверка на null и сравненние классов
-        if (obj == null || !(obj.getClass() == this.getClass())) {
+        // Проверка на null и сравнение классов
+        if (obj == null || obj.getClass() != getClass()) {
             return false;
         }
 
-        Rectangle other = (Rectangle) obj; // Приведение типа
+        Rectangle rectangle = (Rectangle) obj; // Приведение типа
         // Сравнение параметров (ширин и высот)
-        return width == other.width && height == other.height;
+        return width == rectangle.width && height == rectangle.height;
     }
 
     @Override
     public int hashCode() {
-        int result = 17;
-        long tempWidth = Double.doubleToLongBits(width);
-        long tempHeight = Double.doubleToLongBits(height);
+        final int prime = 37;
+        int hash = 1;
 
-        result = 31 * result + (int) (tempWidth ^ (tempWidth >>> 32)); // Хеширование width
-        result = 31 * result + (int) (tempHeight ^ (tempHeight >>> 32)); //Хеширование height
+        hash = prime * hash + Double.hashCode(width);
+        hash = prime * hash + Double.hashCode(height);
 
-        return result;
+        return hash;
     }
 }

@@ -47,23 +47,23 @@ public class Circle implements Shape {
             return true;
         }
 
-        // Проверка на null и сравненние классов
-        if (obj == null || !(obj.getClass() == this.getClass())) {
+        // Проверка на null и сравнение классов
+        if (obj == null || obj.getClass() != getClass()) {
             return false;
         }
 
         // Сравнение параметров (радиусов окружностей)
-        Circle other = (Circle) obj;
-        return radius == other.radius;
+        Circle circle = (Circle) obj;
+        return radius == circle.radius;
     }
 
     @Override
     public int hashCode() {
-        int result = 17;
-        long temp = Double.doubleToLongBits(radius); // Преобразуем radius в long
+        final int prime = 37;
+        int hash = 1;
 
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        hash = prime * hash + Double.hashCode(radius);
 
-        return result;
+        return hash;
     }
 }

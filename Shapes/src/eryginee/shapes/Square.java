@@ -47,23 +47,23 @@ public class Square implements Shape {
             return true;
         }
 
-        // Проверка на null и сравненние классов
-        if (obj == null || !(obj.getClass() == this.getClass())) {
+        // Проверка на null и сравнение классов
+        if (obj == null || obj.getClass() != getClass()) {
             return false;
         }
 
         // Сравнение параметров (сторон квадрата)
-        Square other = (Square) obj;
-        return sideLength == other.sideLength;
+        Square square = (Square) obj;
+        return sideLength == square.sideLength;
     }
 
     @Override
     public int hashCode() {
-        int result = 17;
-        long temp = Double.doubleToLongBits(sideLength);
+        final int prime = 37;
+        int hash = 1;
 
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        hash = prime * hash + Double.hashCode(sideLength);
 
-        return result;
+        return hash;
     }
 }

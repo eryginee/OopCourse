@@ -22,45 +22,44 @@ public class Triangle implements Shape {
         return x1;
     }
 
-    public double getY1() {
-        return y1;
-    }
-
-    public double getX2() {
-        return x2;
-    }
-
-    public double getY2() {
-        return y2;
-    }
-
-    public double getX3() {
-        return x3;
-    }
-
-    public double getY3() {
-        return y3;
-    }
-
-    // Сеттеры
     public void setX1(double x1) {
         this.x1 = x1;
+    }
+
+    public double getY1() {
+        return y1;
     }
 
     public void setY1(double y1) {
         this.y1 = y1;
     }
 
+    public double getX2() {
+        return x2;
+    }
+
     public void setX2(double x2) {
         this.x2 = x2;
+    }
+
+    public double getY2() {
+        return y2;
     }
 
     public void setY2(double y2) {
         this.y2 = y2;
     }
 
+    public double getX3() {
+        return x3;
+    }
+
     public void setX3(double x3) {
         this.x3 = x3;
+    }
+
+    public double getY3() {
+        return y3;
     }
 
     public void setY3(double y3) {
@@ -91,7 +90,7 @@ public class Triangle implements Shape {
         return sideALength + sideBLength + sideCLength;
     }
 
-    private double getSideLength(double x1, double y1, double x2, double y2) {
+    private static double getSideLength(double x1, double y1, double x2, double y2) {
         return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
     }
 
@@ -108,41 +107,29 @@ public class Triangle implements Shape {
         }
 
         // Проверка на null и сравнение классов
-        if (obj == null || obj.getClass() != this.getClass()) {
+        if (obj == null || obj.getClass() != getClass()) {
             return false;
         }
 
-        Triangle other = (Triangle) obj;
+        Triangle triangle = (Triangle) obj;
         // Сравнение параметров (координат вершин треугольников)
-        return (x1 == other.x1 && y1 == other.y1 &&
-                x2 == other.x2 && y2 == other.y2 &&
-                x3 == other.x3 && y3 == other.y3);
+        return x1 == triangle.x1 && y1 == triangle.y1 &&
+                x2 == triangle.x2 && y2 == triangle.y2 &&
+                x3 == triangle.x3 && y3 == triangle.y3;
     }
 
     @Override
     public int hashCode() {
-        int result = 17;
-        long temp;
+        final int prime = 37;
+        int hash = 1;
 
-        temp = Double.doubleToLongBits(x1);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        hash = prime * hash + Double.hashCode(x1);
+        hash = prime * hash + Double.hashCode(y1);
+        hash = prime * hash + Double.hashCode(x2);
+        hash = prime * hash + Double.hashCode(y2);
+        hash = prime * hash + Double.hashCode(x3);
+        hash = prime * hash + Double.hashCode(y3);
 
-        temp = Double.doubleToLongBits(y1);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-
-        temp = Double.doubleToLongBits(x2);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-
-        temp = Double.doubleToLongBits(y2);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-
-        temp = Double.doubleToLongBits(x3);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-
-        temp = Double.doubleToLongBits(y3);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-
-        return result;
+        return hash;
     }
 }
-
