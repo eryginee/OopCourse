@@ -8,7 +8,7 @@ public class Vector {
     // Конструктор: Vector(vectorSize), vectorSize - размерность вектора
     public Vector(int vectorSize) {
         if (vectorSize <= 0) {
-            throw new IllegalArgumentException("The vector size must be positive; provided value: ." + vectorSize);
+            throw new IllegalArgumentException("The vector size must be positive; provided value: " + vectorSize);
         }
 
         components = new double[vectorSize];
@@ -22,11 +22,11 @@ public class Vector {
     // Конструктор заполнения компонент вектора значениями из массива: Vector(Double[])
     public Vector(double[] array) {
         if (array == null) {
-            throw new IllegalArgumentException("Vector cannot be created from null; provided value: null");
+            throw new NullPointerException("Vector cannot be created from null; provided value: null");
         }
 
         if (array.length == 0) {
-            throw new IllegalArgumentException("Vector size cannot be zero; provided length: " + array.length);
+            throw new IllegalArgumentException("Vector size cannot be zero; provided value: " + array.length);
         }
 
         components = array.clone();
@@ -35,7 +35,7 @@ public class Vector {
     // Конструктор заполнения компонент вектора значениями переданного массива: Vector(vectorSize, double[])
     public Vector(int vectorSize, double[] array) {
         if (vectorSize <= 0) {
-            throw new IllegalArgumentException("The vector size must be positive; provided value: ." + vectorSize);
+            throw new IllegalArgumentException("The vector size must be positive; provided value: " + vectorSize);
         }
 
         // Используем Arrays.copyOf для инициализации components
@@ -51,7 +51,7 @@ public class Vector {
     @Override
     public String toString() {
         if (components.length == 0) {
-            throw new IllegalArgumentException("Vector size cannot be zero; provided length: " + components.length);
+            throw new IllegalArgumentException("Vector size cannot be zero; provided value: " + components.length);
         }
 
         StringBuilder stringBuilder = new StringBuilder(components.length * 4);
@@ -59,9 +59,8 @@ public class Vector {
         stringBuilder.append('{');
 
         for (double component : components) {
-            stringBuilder.append(component);
-            stringBuilder.append(", ");
-
+            stringBuilder.append(component)
+                         .append(", ");
         }
 
         // Удаление последней запятой и пробела
@@ -72,43 +71,29 @@ public class Vector {
     }
 
     // Нестатические методы
-    public void addVector(Vector vector) {
+    public void add(Vector vector) {
         int maxSize = Math.max(components.length, vector.components.length);
 
-        for (int i = 0; i < maxSize; i++) {
-            if (i < components.length && i < vector.components.length) {
-                components[i] += vector.getComponent(i);
-            } else if (i < vector.components.length) {
-                this.addComponent(vector.getComponent(i)); // Метод добавления новых компонентов, если у текущего вектора меньше элементов
-            }
+        // Увеличиваем размер массива, если необходимо
+        if (maxSize > components.length) {
+            components = Arrays.copyOf(components, maxSize);
+        }
+
+        for (int i = 0; i < vector.components.length; i++) {
+            components[i] += vector.components[i];
         }
     }
 
-    public void subtractVector(Vector vector) {
+    public void subtract(Vector vector) {
         int maxSize = Math.max(components.length, vector.components.length);
 
-        for (int i = 0; i < maxSize; i++) {
-            if (i < components.length && i < vector.components.length) {
-                components[i] -= vector.getComponent(i);
-            } else if (i < vector.components.length) {
-                this.addComponent(-vector.getComponent(i)); // Метод добавления новых компонентов с отрицательным значением, если у текущего вектора меньше элементов
-            }
+        if (maxSize > components.length) {
+            components = Arrays.copyOf(components, maxSize);
         }
-    }
 
-    // Метод добавления новой компоненты вектора
-    public void addComponent(double value) {
-        // Создаем новый массив с увеличенным размером
-        double[] newComponents = new double[components.length + 1];
-
-        // Копируем старые компоненты в новый массив
-        System.arraycopy(components, 0, newComponents, 0, components.length);
-
-        // Добавляем новый элемент
-        newComponents[components.length] = value;
-
-        // Обновляем ссылку на массив компонентов
-        components = newComponents;
+        for (int i = 0; i < vector.components.length; i++) {
+            components[i] -= vector.components[i];
+        }
     }
 
     // Умножение вектора на скаляр
@@ -137,16 +122,17 @@ public class Vector {
     // Получение и установка компоненты вектора по индексу
     public double getComponent(int index) {
         if (index < 0 || index >= components.length) {
-            throw new IndexOutOfBoundsException("Index out of array bounds: " + index);
+            throw new IndexOutOfBoundsException("Index out of valid bounds: " + index +
+                    ". Valid range: [0, " + (components.length - 1) + "]");
         }
 
         return components[index];
     }
 
-
     public void setComponent(int index, double value) {
         if (index < 0 || index >= components.length) {
-            throw new IndexOutOfBoundsException("Index out of array bounds: " + index);
+            throw new IndexOutOfBoundsException("Index out of valid bounds: " + index +
+                    ". Valid range: [0, " + (components.length - 1) + "]");
         }
 
         components[index] = value;
@@ -167,11 +153,6 @@ public class Vector {
         // Приведение типа
         Vector vector = (Vector) object;
 
-        // Сравнение длины
-        if (components.length != vector.components.length) {
-            return false;
-        }
-
         // Сравнение массивов с компонентами вектора
         return Arrays.equals(components, vector.components);
     }
@@ -185,24 +166,34 @@ public class Vector {
     }
 
     // Статические методы
-    public static Vector createSummingVector(Vector vector1, Vector vector2) {
-        vector1.addVector(vector2);
-        return vector1;
+    public static Vector getSum(Vector vector1, Vector vector2) {
+        // Создаем новую копию первого вектора
+        Vector result = new Vector(vector1);
+
+        // Используем метод add, чтобы сложить со вторым вектором
+        result.add(vector2);
+
+        return result;
     }
 
-    public static Vector createSubtractingVector(Vector vector1, Vector vector2) {
-        vector1.subtractVector(vector2);
-        return vector1;
+    public static Vector getDifference(Vector vector1, Vector vector2) {
+        // Создаем новую копию первого вектора
+        Vector result = new Vector(vector1);
+
+        // Используем метод subtract, чтобы вычесть второй вектор
+        result.subtract(vector2);
+
+        return result;
     }
 
     public static double getDotProduct(Vector vector1, Vector vector2) {
         int minSize = Math.min(vector1.components.length, vector2.components.length);
-        double sum = 0;
+        double dotProduct = 0;
 
         for (int i = 0; i < minSize; i++) {
-            sum += vector1.components[i] * vector2.components[i];
+            dotProduct += vector1.components[i] * vector2.components[i];
         }
 
-        return sum;
+        return dotProduct;
     }
 }
