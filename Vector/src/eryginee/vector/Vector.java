@@ -50,17 +50,13 @@ public class Vector {
     // Переопределение метода toString()
     @Override
     public String toString() {
-        if (components.length == 0) {
-            throw new IllegalArgumentException("Vector size cannot be zero; provided value: " + components.length);
-        }
-
         StringBuilder stringBuilder = new StringBuilder(components.length * 4);
 
         stringBuilder.append('{');
 
         for (double component : components) {
             stringBuilder.append(component)
-                         .append(", ");
+                    .append(", ");
         }
 
         // Удаление последней запятой и пробела
@@ -72,11 +68,9 @@ public class Vector {
 
     // Нестатические методы
     public void add(Vector vector) {
-        int maxSize = Math.max(components.length, vector.components.length);
-
         // Увеличиваем размер массива, если необходимо
-        if (maxSize > components.length) {
-            components = Arrays.copyOf(components, maxSize);
+        if (vector.components.length > components.length) {
+            components = Arrays.copyOf(components, vector.components.length);
         }
 
         for (int i = 0; i < vector.components.length; i++) {
@@ -85,10 +79,8 @@ public class Vector {
     }
 
     public void subtract(Vector vector) {
-        int maxSize = Math.max(components.length, vector.components.length);
-
-        if (maxSize > components.length) {
-            components = Arrays.copyOf(components, maxSize);
+        if (vector.components.length > components.length) {
+            components = Arrays.copyOf(components, vector.components.length);
         }
 
         for (int i = 0; i < vector.components.length; i++) {
